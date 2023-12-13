@@ -1,0 +1,212 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "DMK Ecommerce Backend Documentation",
+    "description": "This is the documentation for the the DMK Ecommerce Backend",
+    "version": "1.0.0"
+  },
+  "host": "localhost:8000",
+  "basePath": "/api/v1",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/register": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "example": "string"
+                },
+                "email": {
+                  "example": "email"
+                },
+                "password": {
+                  "example": "string"
+                },
+                "role": {
+                  "example": "user | admin"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Creates User in Database and returns the user along with success and a message"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "description": "This endpoint is used to log in the user using email and password.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "email"
+                },
+                "password": {
+                  "example": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Returns user and a jwt token along with success and a message."
+          }
+        }
+      }
+    },
+    "/login/google": {
+      "get": {
+        "description": "This endpoint is used to log in the user using google authentication",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/{userid}": {
+      "get": {
+        "description": "This endpoint helps in getting a single user using its id.",
+        "parameters": [
+          {
+            "name": "userid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Returns a user along with success and a message"
+          }
+        }
+      }
+    },
+    "/auth/google/callback": {
+      "get": {
+        "description": "This is a callback url for the google authentication on which google will redirect the user after authentication the user.",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/create": {
+      "post": {
+        "description": "This endpoint helps in creating a product. But only if a user is logged in. It can be either a normal log in using email and password or a google based login.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "Bearer {token}",
+            "required" : true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "string"
+                },
+                "description": {
+                  "example": "string"
+                },
+                "price": {
+                  "example": "number"
+                },
+                "category": {
+                  "example": "string"
+                },
+                "inStock": {
+                  "example": "number"
+                }
+              }
+            },
+            "required" : true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Create a product in DB and return the same product back to the client along with a success and a message"
+          }
+        }
+      }
+    },
+    "/{categoryid}": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "categoryid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "categoryName": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "categoryid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    }
+  }
+}

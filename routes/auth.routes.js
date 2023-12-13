@@ -13,7 +13,7 @@ const Strategy = require("../utils/passport");
 passport.use(Strategy);
 
 router.post("/register", registerUser);
-router.post("/reset-password", registerUser);
+
 router.post("/login", loginUser);
 router.get(
     "/login/google",

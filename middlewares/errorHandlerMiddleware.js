@@ -1,4 +1,5 @@
 module.exports = (err, req, res, next) => {
+    console.log(err);
     if (err.name === "CastError") {
         err.message = `Invalid Value for ${err.path} : ${err.value}`;
     } else if (err.name === "ValidationError") {
@@ -6,11 +7,8 @@ module.exports = (err, req, res, next) => {
             .map((e) => e.message)
             .join(". ");
     } else if (err.code === 11000) {
-       
         err.message = `Duplicate data : ${Object.keys(err.keyValue)[0]}`;
-    }
-     else if (err.name === "JsonWebTokenError") {
-        
+    } else if (err.name === "JsonWebTokenError") {
         err.message = `Invalid Token`;
     }
 

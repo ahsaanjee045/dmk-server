@@ -1,8 +1,9 @@
 require("dotenv").config();
 const express = require("express");
-const colors = require("colors");
 const connectDB = require("./db/db.js");
+require("colors");
 const session = require("express-session");
+const cors = require("cors")
 const cookieParser = require("cookie-parser");
 const MongoStore = require("connect-mongo");
 const passport = require("passport");
@@ -11,6 +12,8 @@ const productRoutes = require("./routes/product.routes.js");
 const CustomError = require("./utils/CustomError.js");
 const errorHandlerMiddleware = require("./middlewares/errorHandlerMiddleware.js");
 const categoryRoutes = require("./routes/category.routes.js");
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger-docs.json');
 
 const store = new MongoStore({
     mongoUrl: process.env.MONGO_URI_SESSION,
@@ -18,7 +21,10 @@ const store = new MongoStore({
 
 const app = express();
 
-
+app.use(cors()) // all requests are allowed for now
+// whitelist
+// blacklist
+// method allowed
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "30mb" }));
 app.use(cookieParser());
@@ -33,6 +39,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 app.use("/api/v1/user", authRoutes);
 app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/category", categoryRoutes);

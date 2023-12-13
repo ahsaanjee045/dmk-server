@@ -4,7 +4,8 @@ const CustomError = require("../utils/CustomError");
 const asyncErrorHandler = require("../utils/asyncErrorHandler");
 
 const createProduct = asyncErrorHandler(async (req, res, next) => {
-    let { name, description, price, category, inStock } = req.body;
+    let { name, description, price, category, inStock, brand } = req.body;
+    console.log(req.file);
 
     let newproduct = await new Product({
         name,
@@ -12,6 +13,7 @@ const createProduct = asyncErrorHandler(async (req, res, next) => {
         price: +price,
         category,
         inStock: +inStock,
+        brand,
     }).save();
 
     if (!newproduct) {
@@ -22,8 +24,7 @@ const createProduct = asyncErrorHandler(async (req, res, next) => {
 });
 
 const getAllProducts = asyncErrorHandler(async (req, res, next) => {
-
-    let products = await Product.find().populate("category reviews.userid");
+    let products = await Product.find().populate("category");
 
     return sendResponse(res, 200, "All Products", products);
 });

@@ -20,6 +20,11 @@ const productSchema = new mongoose.Schema(
             // minLength : [10, "Product Name must be at least 10 characters long."],
             // maxLength : [100, "Product Name must be at most 100 characters long."]
         },
+        brand: {
+            type: String,
+            required: true,
+            trim: true,
+        },
         price: {
             type: Number,
             required: true,
