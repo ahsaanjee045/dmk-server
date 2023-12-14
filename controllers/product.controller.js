@@ -1,11 +1,18 @@
+const { validationResult } = require("express-validator");
 const Product = require("../models/product.model");
 const sendResponse = require("../utils/ApiResponse");
 const CustomError = require("../utils/CustomError");
 const asyncErrorHandler = require("../utils/asyncErrorHandler");
 
 const createProduct = asyncErrorHandler(async (req, res, next) => {
+    let errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        let error = errors.errors.map((e) => e.msg).join(", ");
+        return next(new CustomError(error, 400));
+    }
+
     let { name, description, price, category, inStock, brand } = req.body;
-    console.log(req.file);
 
     let newproduct = await new Product({
         name,
@@ -14,6 +21,7 @@ const createProduct = asyncErrorHandler(async (req, res, next) => {
         category,
         inStock: +inStock,
         brand,
+        image: req?.file?.filename || "",
     }).save();
 
     if (!newproduct) {

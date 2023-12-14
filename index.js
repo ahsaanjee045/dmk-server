@@ -4,6 +4,7 @@ const connectDB = require("./db/db.js");
 require("colors");
 const session = require("express-session");
 const cors = require("cors")
+const path = require("path");
 const cookieParser = require("cookie-parser");
 const MongoStore = require("connect-mongo");
 const passport = require("passport");
@@ -21,10 +22,15 @@ const store = new MongoStore({
 
 const app = express();
 
-app.use(cors()) // all requests are allowed for now
+app.use(cors({
+    origin : "http://localhost:5173",
+    methods : "GET, POST, PUT, DELETE, PATCH, OPTION, HEAD",
+    credentials : true
+})) // all requests are allowed for now
 // whitelist
 // blacklist
 // method allowed
+app.use(express.static(path.resolve("my-uploads")))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "30mb" }));
 app.use(cookieParser());

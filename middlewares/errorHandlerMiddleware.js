@@ -1,5 +1,5 @@
 module.exports = (err, req, res, next) => {
-    console.log(err);
+
     if (err.name === "CastError") {
         err.message = `Invalid Value for ${err.path} : ${err.value}`;
     } else if (err.name === "ValidationError") {
