@@ -37,5 +37,17 @@ const getAllProducts = asyncErrorHandler(async (req, res, next) => {
     return sendResponse(res, 200, "All Products", products);
 });
 
+const getSingleProduct = asyncErrorHandler(async (req, res, next) => {
+    let id = req.params.id;
+    let product = await Product.findById(id).populate("category");
+
+    if (product) {
+        return sendResponse(res, 200, "Produc Fetched Successfully", product);
+    }
+
+    return next(new CustomError("Invalid Product Id", 400));
+});
+
 module.exports.createProduct = createProduct;
 module.exports.getAllProducts = getAllProducts;
+module.exports.getSingleProduct = getSingleProduct;
