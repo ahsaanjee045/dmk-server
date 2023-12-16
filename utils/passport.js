@@ -21,6 +21,10 @@ let Strategy = new GoogleStrategy(
                 password: "password",
             }).save();
 
+            // // new Cart({
+            //     userid : user._id
+            // })
+
             if (!user) {
                 callback(new Error("Cann't find user"), null);
             }

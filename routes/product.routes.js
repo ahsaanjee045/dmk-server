@@ -5,6 +5,8 @@ const {
     createProduct,
     getAllProducts,
     getSingleProduct,
+    updateProduct,
+    deleteProduct,
 } = require("../controllers/product.controller");
 const { verifyUser, verifyAdmin } = require("../middlewares/authMiddleware");
 const upload = require("../utils/imageUpload");
@@ -22,5 +24,7 @@ router.post(
 );
 router.get("/", getAllProducts);
 router.get("/:id", getSingleProduct);
+router.put("/:id", verifyUser, verifyAdmin, upload.single("image"), updateProduct)
+router.delete("/:id", verifyUser, verifyAdmin, deleteProduct)
 
 module.exports = router;

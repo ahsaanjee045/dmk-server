@@ -40,6 +40,9 @@ app.use(
         resave: false,
         saveUninitialized: false,
         store: store,
+        cookie : {
+            maxAge : 2 * 24 * 60 * 60 * 1000, // 2 days
+        }
     })
 );
 app.use(passport.initialize());

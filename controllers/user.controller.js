@@ -2,7 +2,7 @@ const User = require("../models/user.model");
 const sendResponse = require("../utils/ApiResponse");
 const CustomError = require("../utils/CustomError");
 const asyncErrorHandler = require("../utils/asyncErrorHandler");
-// const bcryptjs = require("bcryptjs")
+
 
 const registerUser = asyncErrorHandler(async (req, res, next) => {
     let { username, email, password, role } = req.body;
@@ -37,14 +37,12 @@ const registerUser = asyncErrorHandler(async (req, res, next) => {
         role: role ? role : "user",
     }).save();
 
-    user = user.toObject()
-    delete user.password
+    user = user.toObject();
+    delete user.password;
 
     return sendResponse(res, 201, "User Registered", user);
 });
 
-
-// 
 const loginUser = asyncErrorHandler(async (req, res, next) => {
     let { email, password } = req.body;
     if (!email || !email.trim() || !password || !password.trim()) {
@@ -82,9 +80,7 @@ const getUserById = asyncErrorHandler(async (req, res, next) => {
     return sendResponse(res, 200, "User Found Successfully", user);
 });
 
-// module.exports = {
-//     registerUser,
-// };
+
 module.exports.registerUser = registerUser;
 module.exports.loginUser = loginUser;
 module.exports.getUserById = getUserById;

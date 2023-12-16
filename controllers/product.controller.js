@@ -3,6 +3,7 @@ const Product = require("../models/product.model");
 const sendResponse = require("../utils/ApiResponse");
 const CustomError = require("../utils/CustomError");
 const asyncErrorHandler = require("../utils/asyncErrorHandler");
+const fs = require("fs/promises")
 
 const createProduct = asyncErrorHandler(async (req, res, next) => {
     let errors = validationResult(req);
@@ -48,6 +49,76 @@ const getSingleProduct = asyncErrorHandler(async (req, res, next) => {
     return next(new CustomError("Invalid Product Id", 400));
 });
 
+const updateProduct = asyncErrorHandler(async (req, res, next) => {
+    let id = req.params.id;
+    let data = req.body;
+    let updatedProduct;
+    if (req?.file && req?.file?.filename) {
+        updatedProduct = await Product.findByIdAndUpdate(
+            id,
+            {
+                $set: {
+                    ...data,
+                    image: req?.file?.filename,
+                },
+            },
+            { new: true }
+        ).populate("category");
+
+        if (updatedProduct) {
+            return sendResponse(
+                res,
+                200,
+                "Product Updated Successfully",
+                updatedProduct
+            );
+        } else {
+            return next(new CustomError("Invalid Product Id", 404));
+        }
+    } else {
+        updatedProduct = await Product.findByIdAndUpdate(
+            id,
+            {
+                $set: {
+                    ...data,
+                },
+            },
+            { new: true }
+        ).populate("category");
+
+        if (updatedProduct) {
+            return sendResponse(
+                res,
+                200,
+                "Product Updated Successfully",
+                updatedProduct
+            );
+        } else {
+            return next(new CustomError("Invalid Product Id", 404));
+        }
+    }
+});
+
+const deleteProduct = asyncErrorHandler(async (req, res, next) => {
+    let id = req.params.id;
+
+    let deletedProduct = await Product.findByIdAndDelete(id);
+
+    if (deletedProduct) {
+        await fs.unlink("./my-uploads/"+deletedProduct?.image)
+        return sendResponse(
+            res,
+            200,
+            "Product Deleted Successfully",
+            deletedProduct
+        );
+    } else {
+        return next(new CustomError("Invalid Product Id", 404));
+    }
+});
+
 module.exports.createProduct = createProduct;
 module.exports.getAllProducts = getAllProducts;
 module.exports.getSingleProduct = getSingleProduct;
+module.exports.updateProduct = updateProduct;
+module.exports.deleteProduct = deleteProduct;
